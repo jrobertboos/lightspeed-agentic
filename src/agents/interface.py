@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from agents import Agent, OpenAIChatCompletionsModel
+from agents import Agent, OpenAIResponsesModel
 
 
 class AgentInterface(ABC):
@@ -21,7 +21,7 @@ class AgentInterface(ABC):
 
     def create(
         self,
-        model: OpenAIChatCompletionsModel,
+        model: OpenAIResponsesModel,
         handoffs: list[Agent] | None = None,
     ) -> Agent:
         return Agent(
