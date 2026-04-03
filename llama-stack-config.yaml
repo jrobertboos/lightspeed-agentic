@@ -1,0 +1,47 @@
+apis:
+- responses
+- inference
+- vector_io
+- tool_runtime
+- files
+
+image_name: starter
+
+providers:
+  responses:
+  - config:
+      persistence:
+        agent_state:
+          namespace: agents_state
+          backend: kv_default
+        responses:
+          table_name: agents_responses
+          backend: sql_default
+    provider_id: builtin
+    provider_type: inline::builtin
+  inference:
+  - provider_id: openai # This ID is a reference to 'providers.inference'
+    provider_type: remote::openai
+    config:
+      api_key: ${env.OPENAI_API_KEY}
+      allowed_models: ["${env.E2E_OPENAI_MODEL:=gpt-4o-mini}"]
+  vector_io:
+  - config:
+      persistence:
+        namespace: vector_io::faiss
+        backend: kv_default
+    provider_id: faiss
+    provider_type: inline::faiss
+  files:
+  - config:
+      metadata_store:
+        table_name: files_metadata
+        backend: sql_default
+      storage_dir: ~/.llama/storage/files
+    provider_id: builtin-files
+    provider_type: inline::localfs
+
+
+
+server:
+  port: 8321
